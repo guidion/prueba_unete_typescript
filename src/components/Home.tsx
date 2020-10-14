@@ -8,18 +8,20 @@ const API_URL = "https://run.mocky.io/v3/b3dc9e1b-165f-4648-ab73-1a75e82fd899"
 
 
 export default function Home () {
-    const [apiData, setApiData] = useState([])
+    const [apiData, setApiData] = useState(null)
     const [seriesData, setSeriesData] = useState([])
     const [moviesData, setMoviesData] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // setApiData({ loading: true, repos: null })
         fetch(API_URL)
             .then((res) => res.json())
             .then((data) => {
+                console.log(data.entries)
                 setApiData(data.entries)
+                setLoading(false)
             })
-        }, [setApiData]  // Ejecuta una sola vez cuando se coloca una lista vacía, si se deja vacío se ejecuta varias veces
+        }, [apiData]
     )
 
     const filterProgramType = (data: any, programType: string): any => {
@@ -36,7 +38,7 @@ export default function Home () {
         setMoviesData(filterProgramType(apiData, "movie"))
     }
 
-    return (
+    const cards = (
         <Grid container spacing={2}>
             <Grid item sm={6}>
                 <Card>
@@ -58,6 +60,8 @@ export default function Home () {
             </Grid>
         </Grid>
     )
+
+    return (cards)
 }
 
 /*const Home = () => {
